@@ -18,7 +18,7 @@ async function notify() {
     const form = new URLSearchParams()
     const gas = await getGasPrice()
     const gasGwei = gas.data.fast/1000000000
-    if (gasGwei <= 43) {
+    if (gasGwei <= 200) {
         form.append('message', `สุลต่านไทม์ Gwei: ${gasGwei}`)
         const response = await fetch('https://notify-api.line.me/api/notify', {
             method: 'POST', 
