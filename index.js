@@ -17,8 +17,8 @@ async function notify() {
     const token = process.env.LINE_NOTI_TOKEN
     const form = new URLSearchParams()
     const gas = await getGasPrice()
-    const gasGwei = gas.data.fast/1000000000
-    if (gasGwei <= 200) {
+    const gasGwei = Math.floor(gas.data.fast/1000000000)
+    if (gasGwei <= 43) {
         form.append('message', `สุลต่านไทม์ Gwei: ${gasGwei}`)
         const response = await fetch('https://notify-api.line.me/api/notify', {
             method: 'POST', 
