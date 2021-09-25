@@ -20,7 +20,8 @@ async function notify() {
     const form = new URLSearchParams()
     const gas = await getGasPrice()
     const gasGwei = Math.floor(gas.data.fast/1000000000)
-    if (gasGwei <= 40 && (Math.abs(lastGas - gasGwei) >= 5)) {
+    const gasDiff = Math.abs(lastGas - gasGwei)
+    if (gasGwei <= 40 && (gasDiff >= 5)) {
         form.append('message', `สุลต่านไทม์ Gwei: ${gasGwei}`)
         const response = await fetch('https://notify-api.line.me/api/notify', {
             method: 'POST', 
@@ -32,8 +33,12 @@ async function notify() {
         })
         // const data = await response.json()
         lastGas = gasGwei
-        console.log('lastGas', lastGas)
+    } else {
+        if (gasDiff >= 5) {
+            lastGas = gasGwei
+        }
     }
+    console.log('lastGas', lastGas)
     // console.log('response', data)
 }
 
