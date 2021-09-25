@@ -3,6 +3,8 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
+let lastGas = 0
+
 async function getGasPrice() {
     const response = await fetch('https://www.gasnow.org/api/v3/gas/price?utm_source=:line-noti-gas', {
         method: 'GET',
@@ -18,7 +20,7 @@ async function notify() {
     const form = new URLSearchParams()
     const gas = await getGasPrice()
     const gasGwei = Math.floor(gas.data.fast/1000000000)
-    if (gasGwei <= 43) {
+    if (gasGwei <= 40 && (Math.abs(lastGas - gasGwei) >= 5)) {
         form.append('message', `สุลต่านไทม์ Gwei: ${gasGwei}`)
         const response = await fetch('https://notify-api.line.me/api/notify', {
             method: 'POST', 
@@ -29,6 +31,8 @@ async function notify() {
             body: form
         })
         // const data = await response.json()
+        lastGas = gasGwei
+        console.log('lastGas', lastGas)
     }
     // console.log('response', data)
 }
