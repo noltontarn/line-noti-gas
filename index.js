@@ -19,7 +19,7 @@ async function notify() {
     const token = process.env.LINE_NOTI_TOKEN
     const form = new URLSearchParams()
     const gas = await getGasPrice()
-    const gasGwei = Math.floor(gas.fast.gwei)
+    const gasGwei = Math.floor(gas.sources[0].fast)
     const gasDiff = Math.abs(lastGas - gasGwei)
     if (gasGwei <= 50 && (gasDiff >= 5)) {
         form.append('message', `สุลต่านไทม์ Gwei: ${gasGwei}`)
@@ -45,7 +45,7 @@ async function notify() {
 async function run() {
     // await notify()
     // await getGasPrice()
-    setInterval(notify, 15000)
+    setInterval(notify, 10000)
 }
 
 run()
